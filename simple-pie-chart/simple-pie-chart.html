@@ -1,0 +1,75 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="simple-pie-chart" attributes="size lineWidth slices">
+
+<template>
+
+	<!-- how can the dimension be different?-->
+	<canvas id="pie" height="{{size}}" width="{{size}}"></canvas>
+	
+</template>
+
+<script>
+	Polymer('simple-pie-chart', {
+
+		created: function() {
+        	this.slices = [];// Initialize and hint type to be array.
+        	this.lineWidth = 1;
+        },
+
+        ready: function() {
+
+        	var canvas = this.$.pie;
+        	var context = canvas.getContext('2d');
+        	var centerX = canvas.width / 2;
+        	var centerY = canvas.height / 2;
+        	var radius = canvas.height / 2;
+
+
+        	if(this.slices[0].caption.length > 0){ // make run for captions on left
+        		radius = 0.69 * radius;
+        		centerX = 0.70 * centerX;
+        		var topOffset = 20;
+        	}
+
+        	var start = 0;
+        	var end = 0;
+
+        	for (var i = 0; i < this.slices.length; ++i) {
+
+        		console.log(this.slices[i]);
+
+        		context.beginPath();
+
+        		context.fillStyle = this.slices[i].color;
+
+        		var slice = parseFloat(this.slices[i].slice);
+
+ 				if(slice < 1.0 && slice > 0.0){ // percentage
+ 					end = start + slice * 2 * Math.PI;
+ 				}
+ 				else { // degrees
+ 					end = start + slice * Math.PI/180;
+ 				}
+ 						
+ 				context.moveTo(centerX, centerY);
+ 				context.arc(centerX, centerY, radius, start, end, false);
+ 				context.lineTo(centerX, centerY);
+
+ 				context.closePath();
+ 				context.fill();
+ 			
+ 				start = end;
+
+				context.lineWidth = this.lineWidth;
+				context.strokeStyle = '#003300';
+				context.stroke();
+
+ 				context.fillText(this.slices[i].caption, centerX+radius+15, topOffset*(i+1));
+
+			}
+		}
+	});
+</script>
+
+</polymer-element>
