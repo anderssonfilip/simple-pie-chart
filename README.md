@@ -1,7 +1,5 @@
-polymer-elements
+A (simple) pie chart with polymer web components
 ================
-
-My playground for custom polymer elements.
 
 Created a pie-chart after attending an event in SF
 
